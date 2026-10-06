@@ -6,12 +6,15 @@ permissions:
 jobs:
   windows-tests:
     runs-on: windows-latest
+    strategy:
+      matrix:
+        java: ['17', '25']
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: '25'
+          java-version: ${{ matrix.java }}
       - name: Restore archived dependencies
         shell: pwsh
         env:
@@ -28,7 +31,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: windows-tests-and-distribution
+          name: windows-java-${{ matrix.java }}-tests-and-distribution
           path: |
             build/test-results/test
             build/reports/tests/test
