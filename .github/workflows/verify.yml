@@ -1,0 +1,35 @@
+name: Verify
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  windows-tests:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '25'
+      - name: Restore archived dependencies
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release download v1.1.0 --repo $env:GITHUB_REPOSITORY --pattern BlockHorizon-1.1.0-offline-deps.zip --dir .offline-deps
+          if ($LASTEXITCODE -ne 0) { throw 'Cannot restore dependency archive' }
+          Expand-Archive .offline-deps/BlockHorizon-1.1.0-offline-deps.zip -DestinationPath .offline-deps
+      - name: Clean build and unit tests
+        shell: pwsh
+        run: |
+          .\gradlew.bat --offline '-PofflineLibs=.offline-deps/lib' clean test build installDist --no-daemon
+          if ($LASTEXITCODE -ne 0) { throw 'Build/tests failed' }
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: windows-tests-and-distribution
+          path: |
+            build/test-results/test
+            build/reports/tests/test
+            build/distributions/*.zip

@@ -1,0 +1,66 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group = 'com.blockhorizon'
+version = '1.1.0'
+
+repositories {
+    mavenCentral()
+}
+
+def gdxVersion = project.findProperty('gdxVersion')
+def lwjglVersion = project.findProperty('lwjglVersion')
+
+configurations.configureEach {
+    resolutionStrategy.eachDependency {
+        if (requested.group == 'org.lwjgl') useVersion lwjglVersion
+    }
+}
+
+dependencies {
+    // Optional local JAR bundle for an offline build; normal builds still resolve pinned Maven artifacts.
+    if (project.hasProperty('offlineLibs')) {
+        implementation fileTree(dir: project.property('offlineLibs'), include: ['*.jar'], exclude: ['junit-*.jar', 'hamcrest-*.jar'])
+        testImplementation fileTree(dir: project.property('offlineLibs'), include: ['junit-*.jar', 'hamcrest-*.jar'])
+    } else {
+        implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
+        implementation "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
+        implementation "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+        runtimeOnly "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+        runtimeOnly "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
+
+        ['lwjgl', 'lwjgl-glfw', 'lwjgl-jemalloc', 'lwjgl-openal', 'lwjgl-opengl', 'lwjgl-stb'].each { module ->
+            runtimeOnly "org.lwjgl:${module}:$lwjglVersion:natives-windows"
+        }
+
+        testImplementation 'junit:junit:4.13.2'
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.release = 17
+    options.encoding = 'UTF-8'
+}
+
+application {
+    mainClass = 'com.blockhorizon.desktop.DesktopLauncher'
+    applicationDefaultJvmArgs = ['--enable-native-access=ALL-UNNAMED', '-Dfile.encoding=UTF-8']
+}
+
+test {
+    useJUnit()
+    maxParallelForks = 1
+    jvmArgs '--enable-native-access=ALL-UNNAMED'
+}
+
+tasks.named('run') {
+    workingDir = rootProject.projectDir
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': application.mainClass.get()
+    }
+}

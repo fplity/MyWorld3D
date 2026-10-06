@@ -1,0 +1,16 @@
+.gradle/
+.gradle-user-home/
+.gradle-home-test/
+.gradle-home-link/
+.gradle-ascii/
+build/
+out/
+.idea/
+*.iml
+hs_err_pid*
+replay_pid*
+.offline-deps/
+.gradle-verification/
+.codex/
+BlockHorizon/saves/
+BlockHorizon/screenshots/
