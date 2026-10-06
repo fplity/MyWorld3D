@@ -56,9 +56,11 @@ $env:GRADLE_USER_HOME = Join-Path (Get-Location) '.gradle-verification'
 
 Release `v1.1.0` 交付：Windows x64 内置运行时 ZIP、普通 Java 发行 ZIP、离线依赖 ZIP、窗口证据 ZIP，以及 SHA256SUMS。
 
-源码、说明、测试、字体许可、构建 Wrapper 和脚本纳入 Git；缓存、开发截图/测试存档、构建目录与 Junction 不上传为源码。推送后还需要核对远程提交/源码树、下载 Release 并比对 SHA-256，再进行本地删除。最终远程核验及清理状态以执行后的聊天和长期项目记录为准，本文件不预先声明完成。
+源码、说明、测试、字体许可、构建 Wrapper 和脚本纳入 Git；缓存、开发截图/测试存档、构建目录与 Junction 不上传为源码。Release 的五个附件已重新下载，与本地产物逐个 SHA-256 一致；源码新克隆恢复后干净构建和全部 30 项测试通过。
 
-GitHub `Verify` 手动工作流从 Release 恢复依赖并执行干净构建和 30 项单测；CI 不运行 GUI，不应把 CI 成功当作显卡兼容性验收。
+GitHub `Verify` 从 Release 恢复依赖，**Windows Java 17 和 Java 25 两个任务均成功**。证据：[Actions 37546936910](https://github.com/fplity/MyWorld3D/actions/runs/37546936910)。工作流验证快照为 `cba3432292105fea446b9ed36e2bdbae41006597`，后续仅交付说明更新；CI 不运行 GUI，不应把 CI 成功当作显卡兼容性验收。
+
+仓库按用户要求改为公开；Windows 便携 ZIP 的匿名下载 HTTP 200。本地工程删除只在远程提交/源码树和最终附件重新核对后执行，清理结果以聊天和长期项目记录为准，测试与上传成功不代表已经完成删除。
 
 ## 未验证与边界
 

@@ -12,7 +12,7 @@
 2. 打开 `BlockHorizon` 文件夹，双击 `BlockHorizon.exe`。
 3. 便携包内置裁剪后的 OpenJDK 25 运行时，**不需要朋友另外安装 Java、Gradle或下载依赖**。转发时发送完整 ZIP，不能只发送 EXE。
 
-目标平台是 Windows 10/11 x64，显卡需支持 OpenGL 3.2+。便携 EXE 未做代码签名，Windows 可能提示未知发布者；请核对 Release 上的 SHA-256 校验文件。仓库为私有仓库，朋友不能直接访问时，可以由仓库所有者下载 ZIP 后转发。
+目标平台是 Windows 10/11 x64，显卡需支持 OpenGL 3.2+。便携 EXE 未做代码签名，Windows 可能提示未知发布者；请核对 Release 上的 SHA-256 校验文件。仓库已公开，朋友可以直接打开 Release 下载，也可以接收你转发的完整 ZIP。
 
 `BlockHorizon-1.1.0.zip` 是较小的普通 Java 发行包，需要已安装 Java 17+，解压后运行 `bin/BlockHorizon.bat`。
 
